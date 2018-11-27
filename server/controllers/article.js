@@ -17,6 +17,7 @@ module.exports = {
     retrieve(req, res) {
         return Article
             .findAll({
+                attributes: ['title', 'author', 'message', 'header'],
                 limit: 1,
                 order: [['createdAt', 'DESC']]
             })
