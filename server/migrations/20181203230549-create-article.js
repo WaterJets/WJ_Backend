@@ -8,13 +8,13 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            author: {
-                type: Sequelize.STRING
-            },
             title: {
                 type: Sequelize.STRING
             },
-            message: {
+            content: {
+                type: Sequelize.TEXT
+            },
+            description: {
                 type: Sequelize.STRING
             },
             header: {
@@ -27,6 +27,15 @@ module.exports = {
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE
+            },
+            authorId: {
+                type: Sequelize.INTEGER,
+                references: {
+                    model: 'author',
+                    key: 'id'
+                },
+                onUpdate: 'CASCADE',
+                onDelete: 'SET NULL',
             }
         });
     },
