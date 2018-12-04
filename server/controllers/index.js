@@ -1,6 +1,7 @@
-const article = require('./article');
-
+const Article = require('./article');
+const Author = require('./author');
 
 module.exports = {
-    article,
+    Article,
+    Author,
 };

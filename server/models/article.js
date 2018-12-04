@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Article = sequelize.define('article', {//TODO:upercase here
+  const Article = sequelize.define('article', {//TODO:upercase here or not :O
       id: {
           type: DataTypes.INTEGER,
           primaryKey: true,
@@ -16,17 +16,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       description: {
           type: DataTypes.STRING,
-          allowNull: false,
-      },
-      header: {
-          type: DataTypes.STRING,
-          allowNull: false,
       },
   }, {
       freezeTableName: true
   });
   Article.associate = function(models) {
-      Article.belongsTo(models.Author, {
+      Article.belongsTo(models.author, {
           foreignKey: 'authorId',
           onDelete: 'CASCADE',
       })

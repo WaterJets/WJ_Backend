@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Author = sequelize.define('Author', {
+  const Author = sequelize.define('author', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     description: {
         type: DataTypes.STRING
     }
-  }, {});
+  }, {
+      freezeTableName: true
+  });
   Author.associate = function(models) {
       Author.hasMany(models.article, {//TODO: article upercase here
           as: 'article',
