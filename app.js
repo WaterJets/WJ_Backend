@@ -18,4 +18,4 @@ app.get('*', (req, res) => res.status(200).send({
 }));
 
 const server = http.createServer(app);
-server.listen(8080);
+server.listen(process.env.PORT || 8080);
