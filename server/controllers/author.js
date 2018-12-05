@@ -4,7 +4,7 @@ module.exports = {
     create(req, res) {
 
         return Author
-            .bulkCreate(req.body)
+            .create(req.body)
             .then(todo => res.status(201).send(todo))
             .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
     },
