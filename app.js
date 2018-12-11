@@ -38,9 +38,6 @@ app.use(passport.session());
 
 
 require('./server/routes')(app, passport);
-app.get('*', (req, res) => res.status(200).send({
-    message: 'Nothing to look for here',
-}));
 
 const server = http.createServer(app);
 server.listen(process.env.PORT || 8080);

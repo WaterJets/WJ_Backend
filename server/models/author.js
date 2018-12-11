@@ -32,12 +32,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
     }
   }, {
-      // hooks: {
-      //     beforeCreate: (user) => {
-      //         const salt = bcrypt.genSaltSync();
-      //         user.password = bcrypt.hashSync(user.password, salt);
-      //     }
-      // },
       freezeTableName: true
   });
   Author.associate = function(models) {
@@ -46,8 +40,5 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'authorId'
       })
   };
-    // // Author.prototype.validPassword = function(password) {
-    // //     return bcrypt.compareSync(password, this.password);
-    // }
   return Author;
 };
