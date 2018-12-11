@@ -39,6 +39,8 @@ module.exports = {
             .catch(next)
     },
     destroy(req, res, next) { //TODO: Does it handle case when article doesnt exist
+        //TODO: Need to logout author when he's deleted!!!!!!!
+        //TODO: Why author's articles are not set to null?
         Author.
         destroy(
             {where: {id: req.params.id}}
@@ -59,7 +61,7 @@ module.exports = {
 
         Author.findOne({where: { username: username}}).
             then(author => {
-                //TODO: need to pass somehow message about what've went wrong
+                //TODO: need to pass somehow message about what has went wrong
                 if(!author) {
                     console.log('user doesnt exist');
                     res.redirect('/login');

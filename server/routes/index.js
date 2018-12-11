@@ -18,12 +18,11 @@ module.exports = (app, passport) => {
     app.get('/api/article/newest', articleController.retrieveNewest);
     app.get('/api/article/:id', articleController.retrieveById);
     //Article POST
-    //TODO: how to retrieve user id?
     app.post('/api/article', isLoggedIn, articleController.create);
     //Article PUT
-    app.put('/api/article/:id', articleController.update);
+    app.put('/api/article/:id', isLoggedIn, articleController.update);
     //Article DELETE
-    app.delete('/api/article/:id', articleController.destroy);
+    app.delete('/api/article/:id', isLoggedIn, articleController.destroy);
     //Author GET
     app.get('/api/author', authorController.retrieve);
 
