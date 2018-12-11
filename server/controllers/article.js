@@ -2,17 +2,36 @@ const Article = require('../models').article;//TODO: upercase here
 
 module.exports = {
     create(req, res) {
-        console.log(req);
-        console.log(req.body);
+
+        const articlePayload = req.body;
+        const currentAuthorId = req.user.id
 
         return Article
-            .create(req.body)
+            .create({
+                'title': articlePayload.title,
+                'content': articlePayload.content,
+                'description': articlePayload.description,
+                'authorId': currentAuthorId
+            })
             .then(todo => res.status(201).send(todo))
             .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
     },
     retrieve(req, res) {
+
         return Article
             .findAll({
+                order: [['createdAt', 'DESC']]
+            })
+            .then(article => res.status(200).send(article))
+            .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
+    },
+    retrieveLoggedInAuthorArticle(req, res) {
+
+        const currentAuthorId = req.user.id
+
+        return Article
+            .findAll({
+                where: {'authorId' : currentAuthorId},
                 order: [['createdAt', 'DESC']]
             })
             .then(article => res.status(200).send(article))

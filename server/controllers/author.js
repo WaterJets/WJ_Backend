@@ -1,14 +1,16 @@
 const Author = require('../models').author;//TODO: upercase here
 
 module.exports = {
+    //TODO: remove it and use signUp
     create(req, res) {
 
         return Author
             .create(req.body)
-            .then(todo => res.status(201).send(todo))
+            .then(author => res.status(201).send(author))
             .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
     },
     retrieve(req, res) {
+
         return Author
             .findAll({
                 attributes: ['id', 'firstName', 'surname', 'description'],
@@ -50,5 +52,38 @@ module.exports = {
                 }
             })
             .catch(next)
+    },
+    login(req, res, next) {
+        var username = req.body.username;
+        var password = req.body.password;
+
+        Author.findOne({where: { username: username}}).
+            then(author => {
+                //TODO: need to pass somehow message about what've went wrong
+                if(!author) {
+                    console.log('user doesnt exist');
+                    res.redirect('/login');
+                }
+                else if(!author.validPassword(password)) {
+                    console.log('invalid password');
+                    res.redirect('/login');
+                }
+                else {
+                    console.log('login succesful');
+                    req.session.author = author.dataValues;
+                    res.redirect('/dashboard');
+                }
+        });
+    },
+    logout(req, res) {
+        req.session.destroy( err => {
+            if(err) {
+                console.log(err);
+            }
+            else {
+                res.clearCookie('connect.sid');
+                res.redirect('/')
+            }
+        });
     }
 };

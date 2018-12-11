@@ -160,3 +160,6 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/node,webstorm
+
+# don't include session files
+./sessions/*

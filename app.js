@@ -1,18 +1,43 @@
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
-const logger = require('morgan');
+const cookieParser = require('cookie-parser');
 const cors = require('cors')
-
-
+const logger = require('morgan');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const uuid = require('uuid/v4');
+const passport   = require('passport')
+const models = require('./server/models')
+const passportStrategies = require('./server/config/passport/passport')(passport, models.author)
 
 const app = express();
-app.use(cors());
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false})); //is it necessary?
+app.use(cookieParser());
+app.use(cors());
+app.use(logger('dev'));
 
-require('./server/routes')(app);
+app.use(session({
+    genid: (req) => {
+        console.log('Inside the session middleware')
+        console.log(req.sessionID)
+        return uuid()
+    },
+    store: new FileStore({path : './sessions/'}),
+    secret: 'TeMp()R4Ry S3cR3D',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+require('./server/routes')(app, passport);
 app.get('*', (req, res) => res.status(200).send({
     message: 'Nothing to look for here',
 }));
