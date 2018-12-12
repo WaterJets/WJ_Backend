@@ -8,7 +8,7 @@ module.exports = (app, passport) => {
         message: 'Api place holder',
     }));
 
-    app.get('/api/dashboard', (req, res) => res.status(200).send({
+    app.get('/dashboard', (req, res) => res.status(200).send({
         message: 'Success',
     }));
 
