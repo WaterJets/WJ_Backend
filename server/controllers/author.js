@@ -64,16 +64,22 @@ module.exports = {
                 //TODO: need to pass somehow message about what has went wrong
                 if(!author) {
                     console.log('user doesnt exist');
-                    res.redirect('/login');
+                    res.status(401).send({
+                        message: 'User does not exist',
+                    });
                 }
                 else if(!author.validPassword(password)) {
                     console.log('invalid password');
-                    res.redirect('/login');
+                    res.status(401).send({
+                        message: 'Invalid password',
+                    });
                 }
                 else {
                     console.log('login succesful');
                     req.session.author = author.dataValues;
-                    res.redirect('/dashboard');
+                    res.status(200).send({
+                        message: 'Loged in succesfully',
+                    });
                 }
         });
     },

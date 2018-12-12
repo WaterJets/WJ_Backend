@@ -8,6 +8,10 @@ module.exports = (app, passport) => {
         message: 'Api place holder',
     }));
 
+    app.get('/api/dashboard', (req, res) => res.status(200).send({
+        message: 'Success',
+    }));
+
     //TODO: super user can modify and delete everything(what about himself?)
 
     //Article GET
@@ -50,10 +54,10 @@ module.exports = (app, passport) => {
                                     }
     ));
     app.post('/api/signup',
-            passport.authenticate('local-signup',
+            passport.authenticate('local-signup'/*,
                                     { successRedirect: '/dashboard',
                                         failureRedirect: '/signin',
-                                    }
+                                    }*/
     ));
 
     //Unhandled routes. Must be at the end.
