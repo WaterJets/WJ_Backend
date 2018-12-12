@@ -161,5 +161,3 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/node,webstorm
 
-# don't include session files
-sessions/*
