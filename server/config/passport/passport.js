@@ -37,7 +37,7 @@ module.exports = function(passport, author) {
             Author.findOne({where: {email: email} }  )
                 .then(function(user) {
                 if(user) {
-                    return done(null, false, {message: 'That email is already taken'});
+                    return done(true, false, {message: 'That email is already taken'});
                 }
                 else {
                     const authorPassword = generateHash(password);
@@ -53,11 +53,12 @@ module.exports = function(passport, author) {
 
                     Author.create(newAuthor).then(function(newAuthor, created) {
                         if (!newAuthor) {
-                            return done(null, false);
+                            //TODO: is it supposed to be show on the frontend?
+                            return done(true, false, {message: 'An error occured during creating author'});
                         }
 
                         if (newAuthor) {
-                            return done(null, newAuthor);
+                            return done(false, newAuthor);
                         }
                     });
 
@@ -83,25 +84,29 @@ module.exports = function(passport, author) {
                 return bCrypt.compareSync(password, userpass);
             };
 
+            //TODO: when I pass error true, message is not passed
+            //it should be propably based this way return done(null, false, { message: 'Incorrect password.' });
+
             Author.findOne({where: {email: email}})
                 .then(function(author) {
 
                     if(!author) {
-                        return done(null, false, {message: 'Email does not exist'});
+                        return done(true, false, {message: 'Email does not exist'});
                     }
 
                     if(!isValidPassword(author.password, password)) {
-                        return done(null, false, {message: 'Incorrect password'});
+                        console.log('Incorrect password');
+                        return done(true, false, {message: 'Incorrect password'});
                     }
 
                     const userDetails = author.get();
 
-                    return done(null, userDetails);
+                    return done(false, userDetails);
                 })
                 .catch(err => {
                     console.log('Error during login: ', err);
 
-                    return done(null, false, {message: 'Something went wrong with login'});
+                    return done(true, false, {message: 'Something went wrong with login'});
                 })
         }
     ));
