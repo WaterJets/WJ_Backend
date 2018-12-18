@@ -30,6 +30,7 @@ module.exports = function(passport, author) {
         },
         function(req, email, password, done) {
 
+            //TODO: move to user schema
             const generateHash = function (password) {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
             };
@@ -80,6 +81,7 @@ module.exports = function(passport, author) {
 
             const Author = author;
 
+            //TODO: move to user schema
             const isValidPassword = function (userpass, password) {
                 return bCrypt.compareSync(password, userpass);
             };

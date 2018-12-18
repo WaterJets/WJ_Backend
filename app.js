@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const cors = require('cors')
 const logger = require('morgan');
 const session = require('express-session');
@@ -14,24 +14,45 @@ const passportStrategies = require('./server/config/passport/passport')(passport
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false})); //is it necessary?
-app.use(cookieParser());
-app.use(cors());
+// app.use(cookieParser());
+
+//
+// const corsOptions = {
+//     origin: 'http://localhost',
+//     credentials: true,
+//
+// }
+
+const corsOptions = {
+    origin: 'https://waterjetsfaplo.000webhostapp.com',
+    credentials: true,
+
+}
+
+
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 
+// app.use(session({
+//     genid: (req) => {
+//         console.log('Inside the session middleware')
+//         console.log(req.sessionID)
+//         return uuid()
+//     },
+//     store: new FileStore({path : './sessions/'}),
+//     secret: 'TeMp()R4Ry S3cR3D',
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         expires: 600000,
+//         secure: false
+//     }
+// }));
 app.use(session({
-    genid: (req) => {
-        console.log('Inside the session middleware')
-        console.log(req.sessionID)
-        return uuid()
-    },
-    store: new FileStore({path : './sessions/'}),
-    secret: 'TeMp()R4Ry S3cR3D',
+    secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-        expires: 600000,
-        secure: false
-    }
+    saveUninitialized: true,
+    // cookie: { secure: false }
 }));
 
 app.use(passport.initialize());
