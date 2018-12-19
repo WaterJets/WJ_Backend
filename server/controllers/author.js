@@ -14,7 +14,7 @@ module.exports = {
         return Author
             .findAll({
                 attributes: ['id', 'firstName', 'surname', 'description'],
-                order: [['surname', 'DESC'], ['firstName', 'DESC']]
+                order: [['id']]
             })
             .then(authors => res.status(200).send(authors))
             .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
