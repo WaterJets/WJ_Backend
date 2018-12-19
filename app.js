@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: false})); //is it necessary?
 // }
 
 const corsOptions = {
-    origin: 'https://fountainjets.wex.pl/',
+    origin: 'https://fountainjets.wex.pl',
     credentials: true,
 
 }
