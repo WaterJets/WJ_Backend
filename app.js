@@ -3,7 +3,6 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const logger = require('morgan');
-const session = require('express-session');
 const passport   = require('passport')
 const models = require('./server/models')
 const passportStrategies = require('./server/config/passport/passport')(passport, models.author)
