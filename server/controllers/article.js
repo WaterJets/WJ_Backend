@@ -26,7 +26,6 @@ module.exports = {
             .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
     },
     retrieveLoggedInAuthorArticle(req, res) {
-
         const currentAuthorId = req.user.id
 
         return Article

@@ -1,24 +1,6 @@
 const Author = require('../models').author;
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 
 module.exports = {
-    //TODO: remove it and use signUp
-    create(req, res) {
-
-
-        return Author
-            .create(req.body)
-            .then(author => {
-                //TODO: move "secret" to env variable
-                let token = jwt.sign({id: author.id}, "secret", {
-                    expiresIn: 86400
-                });
-
-                res.status(201).send({token: token});
-            })
-            .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
-    },
     retrieve(req, res) {
 
         return Author
@@ -48,7 +30,8 @@ module.exports = {
             })
             .catch(next)
     },
-    destroy(req, res, next) { //TODO: Does it handle case when article doesnt exist
+    destroy(req, res, next) {
+        //TODO: Does it handle case when author doesnt exist
         //TODO: Need to logout author when he's deleted!!!!!!!
         //TODO: Why author's articles are not set to null?
         Author.
@@ -64,44 +47,5 @@ module.exports = {
                 }
             })
             .catch(next)
-    },
-    login(req, res, next) {
-        var username = req.body.username;
-        var password = req.body.password;
-
-        Author.findOne({where: { username: username}}).
-            then(author => {
-                //TODO: need to pass somehow message about what has went wrong
-                if(!author) {
-                    console.log('user doesnt exist');
-                    res.status(401).send({
-                        message: 'User does not exist',
-                    });
-                }
-                else if(!author.validPassword(password)) {
-                    console.log('invalid password');
-                    res.status(401).send({
-                        message: 'Invalid password',
-                    });
-                }
-                else {
-                    console.log('login succesful');
-                    req.session.author = author.dataValues;
-                    res.status(200).send({
-                        message: 'Loged in succesfully',
-                    });
-                }
-        });
-    },
-    logout(req, res) {
-        req.session.destroy( err => {
-            if(err) {
-                console.log(err);
-            }
-            else {
-                res.clearCookie('connect.sid');
-                res.redirect('/')
-            }
-        });
     }
 };

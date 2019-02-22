@@ -11,24 +11,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-
 const corsOptions = {
-    origin: 'http://localhost',
-    credentials: true,
+    origin: '*',
 };
-//
-// const corsOptions = {
-//     origin: 'https://fountainjets.wex.pl',
-//     credentials: true,
-//
-// }
-
 
 app.use(cors(corsOptions));
 app.use(logger('dev'));
 
 app.use(passport.initialize());
-
 
 require('./server/routes')(app, passport);
 

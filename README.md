@@ -1,4 +1,4 @@
-You need NodeJs 10.0.0 or bigger
+You need NodeJs 10.0.0 or higher
 
 type to install dependencies:
 npm install
