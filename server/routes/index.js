@@ -1,30 +1,15 @@
-const articleController = require('../controllers').Article;
-const authorController = require('../controllers').Author;
-
-module.exports = (app) => {
-
+module.exports = (app, passport) => {
     app.get('/api', (req, res) => res.status(200).send({
         message: 'Api place holder',
     }));
+    //TODO: create super user - can modify and delete everything(what about himself?)
 
-    //Article GET
-    app.get('/api/article', articleController.retrieve);
-    app.get('/api/article/newest', articleController.retrieveNewest);
-    app.get('/api/article/:id', articleController.retrieveById);
-    //Article POST
-    app.post('/api/article', articleController.create);
-    //Article PUT
-    app.put('/api/article/:id', articleController.update);
-    //Article DELETE
-    app.delete('/api/article/:id', articleController.destroy);
+    require('./article')(app, passport);
+    require('./author')(app, passport);
+    require('./login')(app, passport);
+    require('./signUp')(app, passport);
 
-    //Author GET
-    app.get('/api/author', authorController.retrieve);
-    app.get('/api/author/:id', authorController.retrieveById);
-    //Author POST
-    app.post('/api/author', authorController.create);
-    //Article PUT
-    app.put('/api/author/:id', authorController.update);
-    //Article DELETE
-    app.delete('/api/author/:id', authorController.destroy);
+    app.get('*', (req, res) => res.status(200).send({
+        message: 'Nothing to look for here',
+    }));
 };

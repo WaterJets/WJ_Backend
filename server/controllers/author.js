@@ -1,18 +1,12 @@
-const Author = require('../models').author;//TODO: upercase here
+const Author = require('../models').author;
 
 module.exports = {
-    create(req, res) {
-
-        return Author
-            .create(req.body)
-            .then(todo => res.status(201).send(todo))
-            .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
-    },
     retrieve(req, res) {
+
         return Author
             .findAll({
                 attributes: ['id', 'firstName', 'surname', 'description'],
-                order: [['surname', 'DESC'], ['firstName', 'DESC']]
+                order: [['id']]
             })
             .then(authors => res.status(200).send(authors))
             .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
@@ -36,7 +30,10 @@ module.exports = {
             })
             .catch(next)
     },
-    destroy(req, res, next) { //TODO: Does it handle case when article doesnt exist
+    destroy(req, res, next) {
+        //TODO: Does it handle case when author doesnt exist
+        //TODO: Need to logout author when he's deleted!!!!!!!
+        //TODO: Why author's articles are not set to null?
         Author.
         destroy(
             {where: {id: req.params.id}}

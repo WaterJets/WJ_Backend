@@ -1,4 +1,6 @@
 'use strict';
+
+
 module.exports = (sequelize, DataTypes) => {
   const Author = sequelize.define('author', {
     id: {
@@ -16,6 +18,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
         type: DataTypes.STRING
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
   }, {
       freezeTableName: true
