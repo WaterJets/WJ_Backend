@@ -1,16 +1,18 @@
 const bCrypt = require('bcrypt');
+const jwtSecret = require('../jwtConfig');
 
 module.exports = function(passport, author) {
-
     const Author = author;
     const LocalStrategy = require('passport-local').Strategy;
+    const PassportJwt = require('passport-jwt');
+    const JWTStrategy = PassportJwt.Strategy;
+    const ExtractJWT = PassportJwt.ExtractJwt;
 
     passport.serializeUser(function(author, done) {
         done(null, author.id);
     });
 
     passport.deserializeUser(function(id, done) {
-
         Author.findByPk(id).then(function(author) {
             if(author) {
                 done(null, author.get());
@@ -19,23 +21,21 @@ module.exports = function(passport, author) {
                 done(author.errors, null);
             }
         });
-
     });
 
     passport.use('local-signup', new LocalStrategy(
         {
             usernameField: 'email',
             passwordField: 'password',
+            session: false,
             passReqToCallback: true
         },
         function(req, email, password, done) {
-
-            //TODO: move to user schema
             const generateHash = function (password) {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
             };
 
-            Author.findOne({where: {email: email} }  )
+            Author.findOne({where: {email: email}})
                 .then(function(user) {
                 if(user) {
                     return done(true, false, {message: 'That email is already taken'});
@@ -62,12 +62,8 @@ module.exports = function(passport, author) {
                             return done(false, newAuthor);
                         }
                     });
-
                 }
-
             });
-
-
         }
     ));
 
@@ -75,6 +71,7 @@ module.exports = function(passport, author) {
         {
             usernameField: 'email',
             passwordField: 'password',
+            session: false,
             passReqToCallback: true
         },
         function(req, email, password, done) {
@@ -88,10 +85,8 @@ module.exports = function(passport, author) {
 
             //TODO: when I pass error true, message is not passed
             //it should be propably based this way return done(null, false, { message: 'Incorrect password.' });
-
             Author.findOne({where: {email: email}})
                 .then(function(author) {
-
                     if(!author) {
                         return done(true, false, {message: 'Email does not exist'});
                     }
@@ -113,4 +108,24 @@ module.exports = function(passport, author) {
         }
     ));
 
-}
+    const opts = {
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        secretOrKey: jwtSecret.secret,
+    };
+
+    passport.use('jwt' , new JWTStrategy(opts, (jwtPayload, done) => {
+            const Author = author;
+
+            console.log("Trying to authenticate");
+
+            console.log(jwtPayload);
+
+            Author.findOne({where: {email: jwtPayload.email}})
+                .then(author => done(false, author)
+                )
+                .catch(err => {
+                    done(err)
+                })
+        })
+    );
+};

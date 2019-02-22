@@ -1,12 +1,22 @@
-const Author = require('../models').author;//TODO: upercase here
+const Author = require('../models').author;
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     //TODO: remove it and use signUp
     create(req, res) {
 
+
         return Author
             .create(req.body)
-            .then(author => res.status(201).send(author))
+            .then(author => {
+                //TODO: move "secret" to env variable
+                let token = jwt.sign({id: author.id}, "secret", {
+                    expiresIn: 86400
+                });
+
+                res.status(201).send({token: token});
+            })
             .catch(error => res.status(400).send(error));//TODO: better error handling, error handling with next
     },
     retrieve(req, res) {
